@@ -32,7 +32,7 @@ function App() {
 
   const handleSearch = (query) => {
     if (query === "") {
-      setFilteredCharacters(null);
+      setFilteredCharacters(data.todospersonajes);
     } else {
       const filtered = data.todospersonajes.filter(character =>
         character.name.toLowerCase().startsWith(query)
