@@ -1,37 +1,46 @@
 import {ApolloServer, gql} from 'apollo-server'
 import axios from "axios";
 
-const personajes = [
-    {
-        name: "Rick",
-
-    },
-    {
-        name: "Morty"
-    }
-]
 
 const typeDefs = gql `
     type personajes{
+        id: ID!
         name: String!
+        status: String!
+        species: String!
+        gender: String!
+        image: String
     }
 
     type Query{
-        cantpersonajes: Int!
         todospersonajes: [personajes]!
     }
 `
 
 const resolvers = {
-    Query:{
-        cantpersonajes: ()=>personajes.length,
-        todospersonajes: async (root, args)=>{
-            const {data: personajesdeapi} = await axios.get("https://rickandmortyapi.com/api/character")
-            return personajesdeapi.results
+    Query: {
+        todospersonajes: async (root, args) => {
+            let page = 1;
+            const result = [];
+
+            const allchar = async (page) => {
+                const { data } = await axios.get(`https://rickandmortyapi.com/api/character?page=${page}`);
+                return data;
+            };
+
+            let response = await allchar(page);
+
+            while (response.info.next) {
+                result.push(...response.results);
+                page++;
+                response = await allchar(page);
+            }
+
+            return result;
         }
     }
+};
 
-}
 
 const server = new ApolloServer({
     typeDefs,
