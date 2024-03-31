@@ -12,10 +12,10 @@ const Paginado = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => {
   };
 
   return (
-    <div>
-      <button onClick={handlePrevious} disabled={currentPage === 1}>Previous</button>
-      <span>Page {currentPage} of {totalPages}</span>
-      <button onClick={handleNext} disabled={currentPage === totalPages}>Next</button>
+    <div className="flex items-center justify-center space-x-4 mt-4">
+      <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handlePrevious} disabled={currentPage === 1}>Previous</button>
+      <span className="text-lg font-semibold">{`Page ${currentPage} of ${totalPages}`}</span>
+      <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handleNext} disabled={currentPage === totalPages}>Next</button>
     </div>
   );
 };

@@ -20,18 +20,49 @@ export default function CharacterDetails({ characters }) {
   };
 
   return (
-    <div>
-      <h2>Character Details</h2>
-      <button onClick={handleClose}>X</button> 
-      <p>Name: {character.name}</p>
-      <p>Status: {character.status}</p>
-      <p>Gender: {character.gender}</p>
-      <p>Species: {character.species}</p>
-      <p>Type: {character.type ? character.type : "unknown"}</p>
-      <p>Location: {character.locationName}</p>
-      <p>Origin: {character.originName}</p>
-      <img src={character.image} alt={character.name} />
+    <div className="relative">
+      <button className="absolute top-0 right-0 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-2 rounded-md" onClick={handleClose}>X</button>
+      <div className="bg-green-500 rounded-md shadow-md p-4 max-w-xs mx-auto">
+        <h2 className="text-lg font-semibold mb-2 text-black text-center">{character.name}</h2>
+        <div className="grid grid-cols-2 gap-2 text-sm text-white">
+          <div>
+            <p className="font-semibold text-black">Status:</p>
+            <p>{character.status}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-black">Gender:</p>
+            <p>{character.gender}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-black">Species:</p>
+            <p>{character.species}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-black">Type:</p>
+            <p>{character.type ? character.type : "unknown"}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-black">Location:</p>
+            <p>{character.locationName}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-black">Origin:</p>
+            <p>{character.originName}</p>
+          </div>
+          <div className="col-span-2 flex justify-center">
+            <img className="max-w-full rounded-md" src={character.image} alt={character.name} />
+          </div>
+        </div>
+      </div>
     </div>
   );
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
-

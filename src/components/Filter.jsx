@@ -16,8 +16,6 @@ const Filter = ({ characters, applyFilters, resetCharacters }) => {
   };
 
   const handleApplyFilters = () => {
-    console.log("Filters:", filters );
-
     let filteredCharacters = [...characters];
 
     if (filters.status !== 'All') {
@@ -30,9 +28,6 @@ const Filter = ({ characters, applyFilters, resetCharacters }) => {
       filteredCharacters = filteredCharacters.filter(character => character.gender === filters.gender);
     }
 
-    console.log("Filtered Characters:", filteredCharacters );
-
-    // Llamar a la función applyFilters para aplicar los filtros
     applyFilters(filteredCharacters);
   };
 
@@ -42,14 +37,20 @@ const Filter = ({ characters, applyFilters, resetCharacters }) => {
   };
 
   return (
-    <div>
-      <select name="status" value={filters.status} onChange={handleChange}>
+    <div className="inline-flex self-center">
+      <select className="text-base font-bold rounded border-2 border-green-500 text-gray-600 h-10 w-40 pl-2 pr-6 bg-white hover:border-gray-400 focus:outline-none appearance-none" 
+              name="status" 
+              value={filters.status} 
+              onChange={handleChange}>
         <option value="All">All Status</option>
         <option value="Alive">Alive</option>
         <option value="Dead">Dead</option>
         <option value="unknown">Unknown</option>
       </select>
-      <select name="species" value={filters.species} onChange={handleChange}>
+      <select className="text-base font-bold rounded border-2 border-green-500 text-gray-600 h-10 w-40 pl-2 pr-6 ml-2 bg-white hover:border-gray-400 focus:outline-none appearance-none" 
+              name="species" 
+              value={filters.species} 
+              onChange={handleChange}>
         <option value="All">All Species</option>
         <option value="Human">Human</option>
         <option value="Alien">Alien</option>
@@ -60,17 +61,21 @@ const Filter = ({ characters, applyFilters, resetCharacters }) => {
         <option value="Robot">Robot</option>
         <option value="Cronenberg">Cronenberg</option>
         <option value="Disease">Disease</option>
-        <option value="unknown">unknown</option>
-        
+        <option value="unknown">Unknown</option>
       </select>
-      <select name="gender" value={filters.gender} onChange={handleChange}>
+      <select className="text-base font-bold rounded border-2 border-green-500 text-gray-600 h-10 w-40 pl-2 pr-6 ml-2 bg-white hover:border-gray-400 focus:outline-none appearance-none" 
+              name="gender" 
+              value={filters.gender} 
+              onChange={handleChange}>
         <option value="All">All Gender</option>
         <option value="Male">Male</option>
         <option value="Female">Female</option>
         <option value="unknown">Unknown</option>
       </select>
-      <button onClick={handleApplyFilters}>Apply Filters</button>
-      <button onClick={handleReset}>Reset</button>
+      <button className="ml-2 h-10 px-4 bg-green-500 hover:bg-green-700 text-white font-bold text-sm" onClick={handleApplyFilters}>Apply Filters</button>
+      <button className="ml-2 h-10 px-4 border-2 border-board-500 hover:bg-board-700 text-white font-bold text-sm" onClick={handleReset}>Reset</button>
+
+
     </div>
   );
 };

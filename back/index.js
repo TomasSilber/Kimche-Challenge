@@ -1,9 +1,8 @@
-import {ApolloServer, gql} from 'apollo-server'
-import axios from "axios";
+import { ApolloServer, gql } from 'apollo-server';
+import axios from 'axios';
 
-
-const typeDefs = gql `
-    type personajes{
+const typeDefs = gql`
+    type Personaje {
         id: ID!
         name: String!
         status: String!
@@ -15,42 +14,50 @@ const typeDefs = gql `
         locationName: String
     }
 
-    type Query{
-        todospersonajes: [personajes]!
+    type Query {
+        todospersonajes: [Personaje]!
     }
-`
+`;
 
 const resolvers = {
     Query: {
-        todospersonajes: async (root, args) => {
+        todospersonajes: async () => {
             let page = 1;
             const result = [];
 
-            const allchar = async (page) => {
+            const fetchCharacters = async (page) => {
                 const { data } = await axios.get(`https://rickandmortyapi.com/api/character?page=${page}`);
                 return data;
             };
 
-            let response = await allchar(page);
+            let response = await fetchCharacters(page);
 
             while (response.info.next) {
                 result.push(...response.results);
                 page++;
-                response = await allchar(page);
+                response = await fetchCharacters(page);
             }
 
-            return result;
-        }
-    }
+            return result.map(character => ({
+                id: character.id,
+                name: character.name,
+                status: character.status,
+                species: character.species,
+                gender: character.gender,
+                image: character.image,
+                type: character.type,
+                originName: character.origin.name,
+                locationName: character.location.name
+            }));
+        },
+    },
 };
-
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
-})
-
+    resolvers,
+});
 
 server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-  });
+    console.log(`🚀 Server ready at ${url}`);
+});

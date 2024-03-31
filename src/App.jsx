@@ -28,7 +28,7 @@ function App() {
   const { data, error, loading } = useQuery(ALL_CHARACTERS_QUERY);
   const [filteredCharacters, setFilteredCharacters] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [charactersPerPage] = useState(10);
+  const [charactersPerPage] = useState(12);
   const location = useLocation().pathname;
 
   if (error) return <span style={{ color: 'red' }}>{error.message}</span>;
@@ -72,32 +72,34 @@ function App() {
     filteredCharacters.slice(indexOfFirstCharacter, indexOfLastCharacter) :
     data?.todospersonajes?.slice(indexOfFirstCharacter, indexOfLastCharacter);
 
-  return (
-    <div className='App'>
-      <header className='App-header'>
-        <h1>Rick and Morty characters</h1>
-      </header>
-
-      <Routes>
-        <Route exact path="/" element={
-          <>
-            <Searchbar onSearch={handleSearch} />
-            {loading ? <p>Loading...</p> : (
-              <Filter characters={data?.todospersonajes} applyFilters={applyFilters} resetCharacters={resetCharacters} />
-            )}
-            <Cards characters={currentCharacters || []} />
-            <Paginado
-              totalItems={filteredCharacters ? filteredCharacters.length : data?.todospersonajes?.length}
-              itemsPerPage={charactersPerPage}
-              currentPage={currentPage}
-              onPageChange={onPageChange}
-            />
-          </>
-        } />
-        <Route path="/character/:id" element={<CharacterDetails characters={data?.todospersonajes} />} />
-      </Routes>
-    </div>
-  );
+    return (
+      <div className="bg-cover" style={{backgroundImage:'url("./components/rym.jpg")'}} >
+    
+        <Routes>
+          <Route exact path="/" element={
+            <>
+              <div className="mt-4"> 
+                <Searchbar onSearch={handleSearch} />
+              </div>
+              {loading ? <p>Loading...</p> : (
+                <div className="mt-4"> 
+                  <Filter characters={data?.todospersonajes} applyFilters={applyFilters} resetCharacters={resetCharacters} />
+                </div>
+              )}
+              <Cards characters={currentCharacters || []} />
+              <Paginado
+                totalItems={filteredCharacters ? filteredCharacters.length : data?.todospersonajes?.length}
+                itemsPerPage={charactersPerPage}
+                currentPage={currentPage}
+                onPageChange={onPageChange}
+              />
+            </>
+          } />
+          <Route path="/character/:id" element={<CharacterDetails characters={data?.todospersonajes} />} />
+        </Routes>
+      </div>
+    );
+    
 }
 
 
