@@ -1,35 +1,107 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { gql, useQuery } from '@apollo/client';
+import './App.css';
+import Cards from './components/Cards';
+import CharacterDetails from './components/CharacterDetails';
+import Searchbar from './components/Searchbar';
+import Filter from './components/Filter'; 
+import Paginado from './components/Pagination';
+
+const ALL_CHARACTERS_QUERY = gql`
+  query {
+    todospersonajes {
+      id
+      name
+      status
+      species
+      gender
+      image
+      type
+      originName
+      locationName
+    }
+  }
+`;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { data, error, loading } = useQuery(ALL_CHARACTERS_QUERY);
+  const [filteredCharacters, setFilteredCharacters] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [charactersPerPage] = useState(12);
+  const location = useLocation().pathname;
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  if (error) return <span style={{ color: 'red' }}>{error.message}</span>;
+
+  useEffect(()=>{
+    if (data?.todospersonajes) {
+      setFilteredCharacters(data.todospersonajes);
+    }
+  },[data]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredCharacters]);
+
+  const handleSearch = (query) => {
+    if (query === "") {
+      setFilteredCharacters(data?.todospersonajes);
+    } else {
+      const filtered = data?.todospersonajes.filter(character =>
+        character.name.toLowerCase().startsWith(query)
+      );
+      setFilteredCharacters(filtered);
+    }
+  };
+
+  const resetCharacters = () => {
+    setFilteredCharacters(data?.todospersonajes);
+  };
+
+  const applyFilters = (filters) => {
+    setFilteredCharacters(filters);
+  };
+
+  const onPageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const indexOfLastCharacter = currentPage * charactersPerPage;
+  const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
+  const currentCharacters = filteredCharacters ?
+    filteredCharacters.slice(indexOfFirstCharacter, indexOfLastCharacter) :
+    data?.todospersonajes?.slice(indexOfFirstCharacter, indexOfLastCharacter);
+
+    return (
+      <div className="bg-cover" style={{backgroundImage:'url("./components/rym.jpg")'}} >
+    
+        <Routes>
+          <Route exact path="/" element={
+            <>
+              <div className="mt-4"> 
+                <Searchbar onSearch={handleSearch} />
+              </div>
+              {loading ? <p>Loading...</p> : (
+                <div className="mt-4"> 
+                  <Filter characters={data?.todospersonajes} applyFilters={applyFilters} resetCharacters={resetCharacters} />
+                </div>
+              )}
+              <Cards characters={currentCharacters || []} />
+              <Paginado
+                totalItems={filteredCharacters ? filteredCharacters.length : data?.todospersonajes?.length}
+                itemsPerPage={charactersPerPage}
+                currentPage={currentPage}
+                onPageChange={onPageChange}
+              />
+            </>
+          } />
+          <Route path="/character/:id" element={<CharacterDetails characters={data?.todospersonajes} />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+    
 }
 
-export default App
+
+export default App;
+
