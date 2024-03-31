@@ -73,7 +73,7 @@ const Filter = ({ characters, applyFilters, resetCharacters }) => {
         <option value="unknown">Unknown</option>
       </select>
       <button className="ml-2 h-10 px-4 bg-green-500 hover:bg-green-700 text-white font-bold text-sm" onClick={handleApplyFilters}>Apply Filters</button>
-      <button className="ml-2 h-10 px-4 border-2 border-board-500 hover:bg-board-700 text-white font-bold text-sm" onClick={handleReset}>Reset</button>
+      <button className="ml-2 h-10 px-4 bg-black border-2 border-board-500 hover:bg-board-700 text-white font-bold text-sm" onClick={handleReset}>Reset</button>
 
 
     </div>
