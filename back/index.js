@@ -1,20 +1,19 @@
-import { ApolloServer, gql } from 'apollo-server'
+import {ApolloServer, gql} from 'apollo-server'
 import axios from "axios";
 
 
-const typeDefs = gql`
-type personajes {
-    id: ID!
-    name: String!
-    status: String!
-    species: String!
-    gender: String!
-    image: String
-    type: String!
-    originName: String
-    locationName: String
-  }
-  
+const typeDefs = gql `
+    type personajes{
+        id: ID!
+        name: String!
+        status: String!
+        species: String!
+        gender: String!
+        image: String
+        type: String
+        originName: String
+        locationName: String
+    }
 
     type Query{
         todospersonajes: [personajes]!
@@ -35,11 +34,7 @@ const resolvers = {
             let response = await allchar(page);
 
             while (response.info.next) {
-                result.push(...response.results.map(character => ({
-                    ...character,
-                    originName: character.origin.name,
-                    locationName: character.location.name
-                })));
+                result.push(...response.results);
                 page++;
                 response = await allchar(page);
             }
@@ -50,7 +45,6 @@ const resolvers = {
 };
 
 
-
 const server = new ApolloServer({
     typeDefs,
     resolvers
@@ -59,4 +53,4 @@ const server = new ApolloServer({
 
 server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
-});
+  });
