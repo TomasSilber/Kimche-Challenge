@@ -73,19 +73,24 @@ function App() {
     data?.todospersonajes?.slice(indexOfFirstCharacter, indexOfLastCharacter);
 
     return (
-      <div className="bg-cover" style={{backgroundImage:'url("./components/rym.jpg")'}} >
-    
-        <Routes>
-          <Route exact path="/" element={
+      <div>
+       <Routes>
+      <Route exact path="/" element={
+        <>
+          <div className="mt-4">
+            {loading ? (
+              <div className="loading-spinner">
+                <div className="loader"></div>
+              </div>
+            ) : (
+              <Searchbar onSearch={handleSearch} />
+            )}
+          </div>
+          {loading ? null : (
             <>
               <div className="mt-4"> 
-                <Searchbar onSearch={handleSearch} />
+                <Filter characters={data?.todospersonajes} applyFilters={applyFilters} resetCharacters={resetCharacters} />
               </div>
-              {loading ? <p>Loading...</p> : (
-                <div className="mt-4"> 
-                  <Filter characters={data?.todospersonajes} applyFilters={applyFilters} resetCharacters={resetCharacters} />
-                </div>
-              )}
               <Cards characters={currentCharacters || []} />
               <Paginado
                 totalItems={filteredCharacters ? filteredCharacters.length : data?.todospersonajes?.length}
@@ -94,11 +99,14 @@ function App() {
                 onPageChange={onPageChange}
               />
             </>
-          } />
-          <Route path="/character/:id" element={<CharacterDetails characters={data?.todospersonajes} />} />
-        </Routes>
+          )}
+        </>
+      } />
+      <Route path="/character/:id" element={<CharacterDetails characters={data?.todospersonajes} />} />
+    </Routes>
       </div>
     );
+    
     
 }
 
