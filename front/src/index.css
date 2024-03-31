@@ -32,7 +32,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background-image: url('./components/rym.jpg');
+  background-image: url('./components/images/rym.jpg');
   background-size: cover; 
   background-position: center; 
   background-attachment: fixed
