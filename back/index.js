@@ -1,5 +1,5 @@
-import { ApolloServer, gql } from 'apollo-server';
-import axios from 'axios';
+const { ApolloServer, gql } = require ('apollo-server');
+const  axios = require  ('axios');
 
 const typeDefs = gql`
     type Personaje {
